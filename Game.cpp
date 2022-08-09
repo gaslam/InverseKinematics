@@ -26,8 +26,8 @@ void Game::Initialize()
 	m_Points.push_back(newPoint2);
 	m_Points.push_back(newPoint3);
 
-	m_Target = Point2f{ 130,170 };
-	utils::CalculateCCD(m_Points, m_Target);
+	const Point2f target { 130,170 };
+	utils::CalculateCCD(m_Points, target);
 }
 
 void Game::Cleanup()
@@ -59,8 +59,6 @@ void Game::Draw() const
 		if (i > 0)utils::DrawLine(newPos, previousPos);
 		previousPos = newPos;
 	}
-
-	utils::FillEllipse(m_Target, m_Radius, m_Radius);
 }
 
 void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
@@ -99,7 +97,6 @@ void Game::ProcessMouseMotionEvent(const SDL_MouseMotionEvent& e)
 	if (!m_CanFollowMouse) return;
 
 	Point2f mousePos{ float(e.x),float(e.y) };
-	m_Target = mousePos;
 	utils::CalculateCCD(m_Points, mousePos);
 }
 
@@ -140,15 +137,13 @@ void Game::ClearBackground() const
 
 void Game::HandleLeftMouseButton(const Point2f& mousePos)
 {
-
-	m_Target = mousePos;
 	const Uint8* pStates{ SDL_GetKeyboardState(nullptr) };
 
 	if (pStates[SDL_SCANCODE_LSHIFT])
 	{
 		m_Points.push_back(mousePos);
 	}
-	utils::CalculateCCD(m_Points, m_Target);
+	utils::CalculateCCD(m_Points, mousePos);
 }
 
 void Game::ShowInstructions() const

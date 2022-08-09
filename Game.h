@@ -27,7 +27,6 @@ private:
 	// DATA MEMBERS
 	const Window m_Window;
 	std::vector<Point2f> m_Points;
-	Point2f m_Target;
 	float m_Radius{ 5 };
 	bool m_CanFollowMouse{ false };
 
