@@ -688,6 +688,7 @@ bool utils::IntersectRectLine(const Rectf& r, const Point2f& p1, const Point2f& 
 
 //Calculates the Angle based on the cross product for the y value and the dot product for for the x value.
 //Based on those calculations, you get a vector that points in the right direction. You can simply get the angle with the atan2 function.
+//I tried doing it with std::acos(Dot(v1,v2)/GetLength(v1)*GetLength(v2)). It goes well for clicking and adjusting the joints, but is demanding on performance when dragging the joints
 double utils::GetVectorAngle(const Vector2f& v1, const Vector2f& v2)
 {
 	//cross product
@@ -700,7 +701,7 @@ double utils::GetVectorAngle(const Vector2f& v1, const Vector2f& v2)
 
 
 	//Rounds of the value to avoid too many digits after the comma.
-	//Other wise this can stop the process from continuing.
+	//Otherwise, this will stop the process from continuing at a certain point.
 	// 37.66666 * 100 =3766.66
 	// 3766.66 + .5 =3767.16    for rounding off value
 	// then type cast to int so value is 3767

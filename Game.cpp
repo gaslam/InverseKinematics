@@ -2,21 +2,12 @@
 #include "Game.h"
 #include "Point.h"
 #include "utils.h"
+#include <iostream>
 
 Game::Game(const Window& window)
 	:m_Window{ window }
 {
 	Initialize();
-	Point2f newPoint{ m_Window.width / 4, m_Window.height / 8 };
-	Point2f newPoint2{ m_Window.width / 4, (m_Window.height / 8) * 3 };
-	Point2f newPoint3{ (m_Window.width / 4) + (newPoint2.y - newPoint.y), (m_Window.height / 8) * 3 };
-	Point2f newPoint4{ newPoint3.x + 100, newPoint3.y + 200 };
-	m_Points.push_back(newPoint);
-	m_Points.push_back(newPoint2);
-	m_Points.push_back(newPoint3);
-
-	m_Target = Point2f{ 530,470 };
-	utils::CalculateCCD(m_Points, m_Target);
 }
 
 Game::~Game()
@@ -26,7 +17,17 @@ Game::~Game()
 
 void Game::Initialize()
 {
+	ShowInstructions();
+	Point2f newPoint{ m_Window.width / 4, m_Window.height / 8 };
+	Point2f newPoint2{ m_Window.width / 4, (m_Window.height / 8) * 3 };
+	Point2f newPoint3{ (m_Window.width / 4) + (newPoint2.y - newPoint.y), (m_Window.height / 8) * 3 };
+	Point2f newPoint4{ newPoint3.x + 100, newPoint3.y + 200 };
+	m_Points.push_back(newPoint);
+	m_Points.push_back(newPoint2);
+	m_Points.push_back(newPoint3);
 
+	m_Target = Point2f{ 130,170 };
+	utils::CalculateCCD(m_Points, m_Target);
 }
 
 void Game::Cleanup()
@@ -147,4 +148,14 @@ void Game::HandleLeftMouseButton(const Point2f& mousePos)
 	{
 		m_Points.push_back(mousePos);
 	}
+	utils::CalculateCCD(m_Points, m_Target);
+}
+
+void Game::ShowInstructions() const
+{
+	std::cout << "--- Inverse Kinematics ---\n\n";
+	std::cout << "-- Instructions --\n\n";
+	std::cout << "F = Toggle whether the end point should follow the mouse cursor or not.\n";
+	std::cout << "Left Mouse Button = Set new target.\n";
+	std::cout << "LSHIFT + Left Mouse Button = Add point to the joints.\n";
 }

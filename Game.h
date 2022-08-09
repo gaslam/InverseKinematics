@@ -36,4 +36,5 @@ private:
 	void Cleanup( );
 	void ClearBackground( ) const;
 	void HandleLeftMouseButton(const Point2f& mousePos);
+	void ShowInstructions() const;
 };
