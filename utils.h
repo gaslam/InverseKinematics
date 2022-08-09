@@ -92,8 +92,8 @@ namespace utils
 
 #pragma region CCD
 	void CalculateCCD(std::vector<Point2f>& points,const Point2f& target);
-	void RotateAroundPoint(std::vector<Point2f>& points, const Point2f& target, const double angle, const Vector2f& start, const size_t& pointNr);
-	void RotateAfterIndex(std::vector<Point2f>& points, const Point2f& target, const double angle, const Vector2f& rotationPoint, const size_t& index);
+	void RotateAroundPoint(std::vector<Point2f>& points, const Point2f& target, const double angle, const Point2f& start, const size_t& pointNr);
+	void RotateAfterIndex(std::vector<Point2f>& points, const Point2f& target, const double angle, const Point2f& rotationPoint, const size_t& index);
 #pragma endregion CCD
 
 }

@@ -6,6 +6,8 @@
 #include "utils.h"
 #include <numbers>
 #include "Matrix2x3.h"
+#include <chrono>
+#include <ctime>
 
 
 #pragma region OpenGLDrawFunctionality
@@ -762,33 +764,39 @@ void utils::CalculateCCD(std::vector<Point2f>& points, const Point2f& target)
 	//Creates 2 vectors from the starting point.
 	size_t currentStartPoint{ points.size() - 1 };
 
-	Vector2f start{ points[currentStartPoint - 1] }, last{ points[points.size() - 1] };
+	Point2f start{ points[currentStartPoint - 1] }, last{ points[points.size() - 1] };
 	Vector2f StartToEnd{ last.x - start.x, last.y - start.y };
 	Vector2f StartToTarget{ target.x - start.x, target.y - start.y };
 	double angle{ GetVectorAngle(StartToEnd, StartToTarget) };
+	int totalStepsDone{};
 
 	//Cycles trough every point besides the last one. Have a look at https://leho-howest.instructure.com/courses/11650/files/2335365?module_item_id=477300 (only accessable for 2012/2022 DAE GD students)
 	//This is not the best way to do it, so it might get changed
+	std::chrono::system_clock::time_point currentTime = std::chrono::system_clock::now();
 	do
 	{
-		start = Vector2f{ points[currentStartPoint - 1] };
+		start = Point2f{ points[currentStartPoint - 1] };
 		StartToEnd = Vector2f{ last.x - start.x, last.y - start.y };
 		StartToTarget = Vector2f{ target.x - start.x, target.y - start.y };
 		angle = GetVectorAngle(StartToEnd, StartToTarget);
 		RotateAfterIndex(points, target, angle, start, currentStartPoint);
 		--currentStartPoint;
 		if (currentStartPoint == 0) currentStartPoint = points.size() - 1;
-		last = Vector2f{ points[points.size() - 1] };
+		last = points[points.size() - 1];
+		++totalStepsDone;
 
 	} while (angle != 0);
+	std::chrono::system_clock::time_point endTime = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsedSecs{ endTime - currentTime };
+	std::cout << "This calculation took around: " << totalStepsDone << " steps and " << elapsedSecs.count() << " milliseconds to complete.\n";
 }
 
 
-void utils::RotateAroundPoint(std::vector<Point2f>& points, const Point2f& target, const double angle, const Vector2f& start, const size_t& pointNr)
+void utils::RotateAroundPoint(std::vector<Point2f>& points, const Point2f& target, const double angle, const Point2f& start, const size_t& pointNr)
 {
 
-	Matrix2x3 translation{ Matrix2x3::CreateTranslationMatrix(start) };
-	Matrix2x3 translationNeg{ Matrix2x3::CreateTranslationMatrix(-start) };
+	Matrix2x3 translation{ Matrix2x3::CreateTranslationMatrix(start.x,start.y) };
+	Matrix2x3 translationNeg{ Matrix2x3::CreateTranslationMatrix(-start.x, -start.y) };
 	Matrix2x3 rot{ Matrix2x3::CreateRotationMatrix(float(angle)) };
 
 	Matrix2x3 var = translation * rot * translationNeg;
@@ -796,7 +804,7 @@ void utils::RotateAroundPoint(std::vector<Point2f>& points, const Point2f& targe
 	points[pointNr] = point;
 }
 
-void utils::RotateAfterIndex(std::vector<Point2f>& points, const Point2f& target, const double angle, const Vector2f& rotationPoint, const size_t& index)
+void utils::RotateAfterIndex(std::vector<Point2f>& points, const Point2f& target, const double angle, const Point2f& rotationPoint, const size_t& index)
 {
 	for (size_t i{ index }; i < points.size(); ++i)
 	{
