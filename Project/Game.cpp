@@ -17,6 +17,7 @@ Game::~Game()
 
 void Game::Initialize()
 {
+	std::cout << "\n\n--- Inverse Kinematics ---\n\n";
 	ShowInstructions();
 	Point2f newPoint{ m_Window.width / 4, m_Window.height / 8 };
 	Point2f newPoint2{ m_Window.width / 4, (m_Window.height / 8) * 3 };
@@ -69,6 +70,9 @@ void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 	{
 	case SDLK_f:
 		m_CanFollowMouse = !m_CanFollowMouse;
+		break;
+	case SDLK_i:
+		ShowInstructions();
 		break;
 	}
 }
@@ -148,9 +152,10 @@ void Game::HandleLeftMouseButton(const Point2f& mousePos)
 
 void Game::ShowInstructions() const
 {
-	std::cout << "--- Inverse Kinematics ---\n\n";
-	std::cout << "-- Instructions --\n\n";
+	std::cout << "\n\n-- Instructions --\n\n";
+	std::cout << "I = Show instructions.\n";
 	std::cout << "F = Toggle whether the end point should follow the mouse cursor or not.\n";
 	std::cout << "Left Mouse Button = Set new target.\n";
-	std::cout << "LSHIFT + Left Mouse Button = Add point to the joints.\n";
+	std::cout << "LSHIFT + Left Mouse Button = Add point to the joints.\n\n";
+	std::cout << "-- Benchmarks --\n\n";
 }
