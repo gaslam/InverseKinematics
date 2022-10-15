@@ -799,7 +799,7 @@ void utils::RotateAroundPoint(std::vector<Point2f>& points, const Point2f& targe
 	Matrix2x3 translationNeg{ Matrix2x3::CreateTranslationMatrix(-start.x, -start.y) };
 	Matrix2x3 rot{ Matrix2x3::CreateRotationMatrix(float(angle)) };
 
-	Matrix2x3 var = translation * rot * translationNeg;
+	Matrix2x3 var = translationNeg * rot * translation;
 	Point2f point = var.Transform(points[pointNr]);
 	points[pointNr] = point;
 }
